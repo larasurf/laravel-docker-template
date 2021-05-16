@@ -52,6 +52,7 @@ services:
       SQS_PREFIX: http://awslocal:4566/000000000000
     volumes:
     - ./:/var/www
+    - ~/.ssh:/root/.ssh
 
   database:
     image: mysql:8.0
