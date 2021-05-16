@@ -53,6 +53,7 @@ services:
     volumes:
     - ./:/var/www
     - ~/.ssh:/root/.ssh
+    - ~/.composer:/root/.composer
 
   database:
     image: mysql:8.0
