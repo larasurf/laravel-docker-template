@@ -1,0 +1,12 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Resources:
+  LaravelBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: laravel
+
+  LaravelQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: laravel

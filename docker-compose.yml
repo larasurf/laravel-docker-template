@@ -1,0 +1,80 @@
+version: '3.9'
+services:
+  awslocal:
+    image: localstack/localstack
+    environment:
+      DATA_DIR: /tmp/localstack/data
+      HOSTNAME_EXTERNAL: localstack
+      SERVICES: 'cloudformation,s3,sqs'
+    ports:
+    - '4566:4566'
+    volumes:
+    - './.docker/localstack/init.d:/docker-entrypoint-initaws.d'
+    - './:/app'
+
+  mail:
+    image: mailhog/mailhog:latest
+    ports:
+    - '8025:8025'
+
+  webserver:
+    build: .docker/nginx
+    depends_on:
+    - laravel
+    environment:
+      UPSTREAM_HOST: laravel
+    volumes:
+    - ./.docker/ssl:/var/ssl
+    - ./:/var/www
+    ports:
+    - '80:80'
+    - '443:443'
+
+  laravel:
+    build: ./
+    depends_on:
+    - database
+    - cache
+    environment:
+      AWS_ENDPOINT: http://awslocal:4566
+      AWS_ACCESS_KEY_ID: local
+      AWS_SECRET_ACCESS_KEY: local
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_BUCKET: laravel
+      DB_CONNECTION: mysql
+      DB_DATABASE: laravel_local
+      DB_HOST: database
+      DB_PASSWORD: supersecret
+      DB_PORT: 3306
+      DB_USERNAME: laravel_local
+      REDIS_HOST: cache
+      SQS_QUEUE: laravel
+      SQS_PREFIX: http://awslocal:4566/000000000000
+    volumes:
+    - ./:/var/www
+
+  database:
+    image: mysql:8.0
+    ports:
+    - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: supersecret
+      MYSQL_DATABASE: laravel_local
+      MYSQL_USER: laravel_local
+      MYSQL_PASSWORD: supersecret
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    volumes:
+    - 'database:/var/lib/mysql'
+
+  cache:
+    image: redis:alpine
+    ports:
+    - '6379:6379'
+    volumes:
+    - 'cache:/data'
+
+volumes:
+  database:
+    driver: local
+  cache:
+    driver: local
