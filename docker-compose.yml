@@ -36,20 +36,24 @@ services:
     - database
     - cache
     environment:
-      AWS_ENDPOINT: http://awslocal:4566
+      AWS_ENDPOINT: "http://awslocal:${SURF_AWSLOCAL_PORT:-4566}"
       AWS_ACCESS_KEY_ID: local
       AWS_SECRET_ACCESS_KEY: local
       AWS_DEFAULT_REGION: us-east-1
       AWS_BUCKET: laravel
+      CACHE_DRIVER: redis
       DB_CONNECTION: mysql
       DB_DATABASE: laravel_local
       DB_HOST: database
       DB_PASSWORD: supersecret
-      DB_PORT: 3306
+      DB_PORT: "${SURF_DB_PORT:-3306}"
       DB_USERNAME: laravel_local
+      MAIL_HOST: mail
+      QUEUE_CONNECTION: sqs
       REDIS_HOST: cache
+      REDIS_PORT: "${SURF_CACHE_PORT:-6379}"
       SQS_QUEUE: laravel
-      SQS_PREFIX: http://awslocal:4566/000000000000
+      SQS_PREFIX: "http://awslocal:${SURF_AWSLOCAL_PORT:-4566}/000000000000"
     volumes:
     - ./:/var/www
     - ~/.ssh:/root/.ssh
