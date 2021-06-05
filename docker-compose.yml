@@ -41,6 +41,8 @@ services:
       AWS_SECRET_ACCESS_KEY: local
       AWS_DEFAULT_REGION: us-east-1
       AWS_BUCKET: laravel
+      AWS_USE_PATH_STYLE_ENDPOINT: true
+      AWS_URL: http://localhost:${SURF_AWSLOCAL_PORT:-4566}/laravel
       CACHE_DRIVER: redis
       DB_CONNECTION: mysql
       DB_DATABASE: laravel_local
