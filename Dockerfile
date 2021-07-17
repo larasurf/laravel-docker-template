@@ -63,8 +63,10 @@ ARG WEB_ROOT=/var/www
 
 COPY ./ $WEB_ROOT
 
-RUN (test -f "$WEB_ROOT/composer.json" && \
-    composer install --no-progress -d $WEB_ROOT && \
+RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+RUN --mount=type=ssh (test -f "$WEB_ROOT/composer.json" && \
+    composer install --no-dev --no-progress -d $WEB_ROOT && \
     composer clear-cache) || echo 'composer.json not found'
 
 RUN (test -f "$WEB_ROOT/package.json" && \
