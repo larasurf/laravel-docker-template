@@ -60,6 +60,7 @@ services:
       - ./:/var/www
       - ~/.ssh:/root/.ssh
       - ~/.composer:/root/.composer
+      - ~/.aws:/aws
 
   database:
     image: mysql:8.0
