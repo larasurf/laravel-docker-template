@@ -49,9 +49,9 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
     docker-php-ext-install -j$(nproc) gd && \
     docker-php-ext-enable gd && \
     apk del --no-cache freetype-dev libjpeg-turbo-dev libpng-dev && \
-    apk add --no-cache --virtual .build-deps autoconf g++ make zlib-dev
-# ping workaround for docker DNS issues
-RUN until ping -c1 pecl.php.net > /dev/null 2>&1; do :; done && \
+    apk add --no-cache --virtual .build-deps autoconf g++ make zlib-dev && \
+    # ping workaround for docker DNS issues
+    until ping -c1 pecl.php.net > /dev/null 2>&1; do :; done && \
     pecl channel-update pecl.php.net && \
     pecl install redis && \
     docker-php-ext-install pdo pdo_mysql iconv intl && \
