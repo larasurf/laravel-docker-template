@@ -13,3 +13,4 @@ storage/test-results
 .phpstorm.meta.php
 _ide_helper*
 docker-compose.override.yml
+.circleci/api-token.txt
