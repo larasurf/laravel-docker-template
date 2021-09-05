@@ -65,15 +65,16 @@ COPY ./ $WEB_ROOT
 
 RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-RUN --mount=type=ssh (test -f "$WEB_ROOT/composer.json" && \
-    composer install --no-dev --no-progress -d $WEB_ROOT && \
-    composer clear-cache) || echo 'composer.json not found'
-
-RUN (test -f "$WEB_ROOT/package.json" && \
-    yarn && \
-    yarn run prod) || echo 'package.json not found'
-
-RUN (test -d "$WEB_ROOT/storage" && test -d "$WEB_ROOT/bootstrap/cache" && \
-    chown -R www-data $WEB_ROOT/storage $WEB_ROOT/bootstrap/cache) || echo 'laravel application not installed'
-
 WORKDIR $WEB_ROOT
+
+RUN --mount=type=ssh if [[ -f 'composer.json' ]] ; then \
+    composer install --no-dev --no-progress && composer clear-cache ; \
+    else echo 'composer.json not found' ; fi
+
+RUN if [[  -f 'package.json' ]] ; then \
+   yarn && yarn run prod ; \
+   else echo 'package.json not found' ; fi
+
+RUN if [[ -d 'storage' ]] && [[ -d 'bootstrap/cache' ]]; then \
+   chown -R www-data storage bootstrap/cache ; \
+   else echo 'laravel application not found' ; fi
