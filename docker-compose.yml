@@ -18,20 +18,24 @@ services:
       - "${SURF_MAIL_UI_PORT:-8025}:8025"
 
   webserver:
-    build: .docker/nginx
+    build:
+      context: ./
+      dockerfile: .docker/nginx/Dockerfile
     depends_on:
       - laravel
     environment:
       UPSTREAM_HOST: laravel
     volumes:
       - ./.docker/ssl:/var/ssl
-      - ./:/var/www
+      - ./public:/var/www/public
     ports:
       - "${SURF_APP_PORT:-80}:80"
       - "${SURF_APP_SSL_PORT:-443}:443"
 
   laravel:
-    build: ./
+    build:
+      context: ./
+      dockerfile: .docker/php-fpm/Dockerfile
     depends_on:
       - database
       - cache
