@@ -7,4 +7,4 @@ COPY .docker/nginx/laravel.conf.template /etc/nginx/templates/default.conf.templ
 
 COPY public /var/www/public
 
-WORKDIR /var/www
+WORKDIR /var/www/public
