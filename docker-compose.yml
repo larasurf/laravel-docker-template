@@ -1,5 +1,11 @@
 version: '3.9'
 services:
+  awscliv2:
+    build: .docker/aws-cli
+    volumes:
+    - ~/.aws:/root/.aws
+    command: '--version'
+
   awslocal:
     image: localstack/localstack
     environment:
@@ -9,8 +15,8 @@ services:
     ports:
       - "${SURF_AWSLOCAL_PORT:-4566}:4566"
     volumes:
-      - './.docker/localstack/init.d:/docker-entrypoint-initaws.d'
-      - './:/app'
+      - ./.docker/localstack/init.d:/docker-entrypoint-initaws.d
+      - ./:/app
 
   mail:
     image: mailhog/mailhog:latest
