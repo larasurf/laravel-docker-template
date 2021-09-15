@@ -2,7 +2,9 @@ FROM php:8.0-fpm-alpine
 
 ENV COMPOSER_VERSION 2.0.13
 ENV COMPOSER_ALLOW_SUPERUSER 1
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+RUN until ping -c1 getcomposer.org > /dev/null 2>&1; do :; done && \
+    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+    until ping -c1 composer.github.io > /dev/null 2>&1; do :; done && \
     php -r "if (hash_file('sha384', 'composer-setup.php') === trim(file_get_contents('https://composer.github.io/installer.sig'))) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer --version=${COMPOSER_VERSION} && \
     php -r "unlink('composer-setup.php');" && \
