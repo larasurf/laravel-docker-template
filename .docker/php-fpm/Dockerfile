@@ -2,6 +2,8 @@ FROM php:8.0-fpm-alpine
 
 ENV COMPOSER_VERSION 2.0.13
 ENV COMPOSER_ALLOW_SUPERUSER 1
+
+# ping workaround for docker DNS issues
 RUN until ping -c1 getcomposer.org > /dev/null 2>&1; do :; done && \
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
     until ping -c1 composer.github.io > /dev/null 2>&1; do :; done && \
@@ -40,6 +42,7 @@ RUN until ping -c1 getcomposer.org > /dev/null 2>&1; do :; done && \
         php8-zip \
         php8-zlib \
         icu-dev \
+        libcurl \
         curl-dev \
         freetype \
         libjpeg-turbo \
@@ -47,12 +50,12 @@ RUN until ping -c1 getcomposer.org > /dev/null 2>&1; do :; done && \
         freetype-dev \
         libjpeg-turbo-dev \
         libpng-dev && \
+    apk upgrade curl && \
     docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/ && \
     docker-php-ext-install -j$(nproc) gd && \
     docker-php-ext-enable gd && \
     apk del --no-cache freetype-dev libjpeg-turbo-dev libpng-dev && \
     apk add --no-cache --virtual .build-deps autoconf g++ make zlib-dev && \
-    # ping workaround for docker DNS issues
     until ping -c1 pecl.php.net > /dev/null 2>&1; do :; done && \
     pecl channel-update pecl.php.net && \
     pecl install redis && \
@@ -70,13 +73,19 @@ RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 WORKDIR $WEB_ROOT
 
 RUN --mount=type=ssh if [[ -f 'composer.json' ]] ; then \
-    composer install --no-dev --no-progress && composer clear-cache ; \
-    else echo 'composer.json not found' ; fi
+      composer install --no-dev --no-progress && composer clear-cache ; \
+    else \
+      echo 'composer.json not found' ; \
+    fi
 
 RUN if [[  -f 'package.json' ]] ; then \
-   yarn && yarn run prod ; \
-   else echo 'package.json not found' ; fi
+     yarn && yarn run prod ; \
+   else \
+     echo 'package.json not found' ; \
+   fi
 
 RUN if [[ -d 'storage' ]] && [[ -d 'bootstrap/cache' ]]; then \
-   chown -R www-data storage bootstrap/cache ; \
-   else echo 'laravel application not found' ; fi
+     chown -R www-data storage bootstrap/cache ; \
+   else \
+     echo 'laravel application not found' ; \
+   fi
