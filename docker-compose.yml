@@ -32,7 +32,7 @@ services:
     environment:
       UPSTREAM_HOST: laravel
     volumes:
-      - ./.docker/ssl:/var/ssl
+      - ./.docker/tls:/var/tls
       - ./public:/var/www/public
     ports:
       - "${SURF_APP_PORT:-80}:80"
