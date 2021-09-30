@@ -84,8 +84,4 @@ RUN if [[  -f 'package.json' ]] ; then \
      echo 'package.json not found' ; \
    fi
 
-RUN if [[ -d 'storage' ]] && [[ -d 'bootstrap/cache' ]]; then \
-     chown -R www-data storage bootstrap/cache ; \
-   else \
-     echo 'laravel application not found' ; \
-   fi
+RUN chown -R www-data $WEB_ROOT
