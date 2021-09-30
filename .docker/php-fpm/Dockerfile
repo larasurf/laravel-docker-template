@@ -67,6 +67,8 @@ RUN until ping -c1 getcomposer.org > /dev/null 2>&1; do :; done && \
 ARG WEB_ROOT=/var/www
 
 COPY ./ $WEB_ROOT
+COPY .docker/php-fpm/surf-entrypoint.sh /usr/local/bin/surf-entrypoint.sh
+RUN chmod +x /usr/local/bin/surf-entrypoint.sh
 
 RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
@@ -84,4 +86,10 @@ RUN if [[  -f 'package.json' ]] ; then \
      echo 'package.json not found' ; \
    fi
 
-RUN chown -R www-data $WEB_ROOT
+RUN if [[ -d 'storage' ]] && [[ -d 'bootstrap/cache' ]]; then \
+     chown -R www-data storage bootstrap/cache ; \
+   else \
+     echo 'laravel application not found' ; \
+   fi
+
+ENTRYPOINT [ "surf-entrypoint.sh" ]

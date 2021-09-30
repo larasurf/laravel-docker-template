@@ -46,6 +46,7 @@ services:
       - database
       - cache
     environment:
+      SURF_USER_ID: "${SURF_USER_ID}"
       AWS_ENDPOINT: http://awslocal:4566
       AWS_ACCESS_KEY_ID: local
       AWS_SECRET_ACCESS_KEY: local
