@@ -69,8 +69,8 @@ services:
       SQS_PREFIX: http://awslocal:4566/000000000000
     volumes:
       - ./:/var/www
-      - ~/.ssh:/root/.ssh
-      - ~/.composer:/root/.composer
+      - ~/.ssh:/home/www-data/.ssh
+      - ~/.composer:/home/www-data/.composer
       - ~/.aws:/larasurf/aws
 
   database:
