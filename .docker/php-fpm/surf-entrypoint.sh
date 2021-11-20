@@ -4,7 +4,9 @@ if [ ! -z "${SURF_USER_ID}" ]; then
     usermod -u ${SURF_USER_ID} www-data
 fi
 
-chmod -R ugo+rw /home/www-data/.composer
+if [ -d "/home/www-data/.composer" ]; then
+  chmod -R ugo+rw /home/www-data/.composer
+fi
 
 if [ $# -gt 0 ];then
     su-exec www-data "$@"
