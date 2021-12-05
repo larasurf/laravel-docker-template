@@ -4,9 +4,9 @@ ENV COMPOSER_VERSION 2.0.13
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 # ping workaround for docker DNS issues
-RUN until ping -c1 getcomposer.org > /dev/null 2>&1; do :; done && \
+RUN until ping -c1 getcomposer.org > /dev/null 2>&1; do : echo 'Failed to ping getcomposer.org...'; done && \
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-    until ping -c1 composer.github.io > /dev/null 2>&1; do :; done && \
+    until ping -c1 composer.github.io > /dev/null 2>&1; do : echo 'Failed to ping composer.github.io...'; done && \
     php -r "if (hash_file('sha384', 'composer-setup.php') === trim(file_get_contents('https://composer.github.io/installer.sig'))) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer --version=${COMPOSER_VERSION} && \
     php -r "unlink('composer-setup.php');" && \
@@ -58,7 +58,7 @@ RUN until ping -c1 getcomposer.org > /dev/null 2>&1; do :; done && \
     docker-php-ext-enable gd && \
     apk del --no-cache freetype-dev libjpeg-turbo-dev libpng-dev && \
     apk add --no-cache --virtual .build-deps autoconf g++ make zlib-dev && \
-    until ping -c1 pecl.php.net > /dev/null 2>&1; do :; done && \
+    until ping -c1 pecl.php.net > /dev/null 2>&1; do : echo 'Failed to ping pecl.php.net...'; done && \
     pecl channel-update pecl.php.net && \
     pecl install redis && \
     docker-php-ext-install pdo pdo_mysql iconv intl && \
