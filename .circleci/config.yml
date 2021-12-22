@@ -19,20 +19,13 @@ jobs:
       - aws-cli/setup
       - checkout
       - run:
-          name: Remove unneeded directories
-          command: |
-            rm -rf .git
-            rm -rf .circleci
-      - run:
           name: Archive the project
-          command: |
-            touch project-template.tar.gz
-            tar -czf project-template.tar.gz --exclude=project-template.tar.gz .
+          command: git archive --worktree-attributes --format tar -o project-template.tar $CIRCLE_TAG
       - run:
           name: Publish the project archive to S3
           command: |
-            aws s3 cp project-template.tar.gz s3://$AWS_BUCKET_STAGE/laravel-docker-template/dist/$CIRCLE_TAG/project-template.tar.gz
-          # todo: aws s3 cp project-template.tar.gz s3://$AWS_BUCKET_PRODUCTION/laravel-docker-template/dist/$CIRCLE_TAG/project-template.tar.gz
+            aws s3 cp project-template.tar s3://$AWS_BUCKET_STAGE/laravel-docker-template/dist/$CIRCLE_TAG/project-template.tar
+          # todo: aws s3 cp project-template.tar s3://$AWS_BUCKET_PRODUCTION/laravel-docker-template/dist/$CIRCLE_TAG/project-template.tar
 workflows:
   version: 2
   publish-tag-workflow:
