@@ -14,8 +14,8 @@ jobs:
             test -n "${AWS_ACCESS_KEY_ID}"
             test -n "${AWS_SECRET_ACCESS_KEY}"
             test -n "${AWS_DEFAULT_REGION}"
-            test -n "${$AWS_BUCKET_STAGE}"
-          # todo: test -n "${$AWS_BUCKET_PRODUCTION}"
+            test -n "${AWS_BUCKET_STAGE}"
+          # todo: test -n "${AWS_BUCKET_PRODUCTION}"
       - aws-cli/setup
       - checkout
       - run:
