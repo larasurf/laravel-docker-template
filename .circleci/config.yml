@@ -14,7 +14,8 @@ jobs:
             test -n "${AWS_ACCESS_KEY_ID}"
             test -n "${AWS_SECRET_ACCESS_KEY}"
             test -n "${AWS_DEFAULT_REGION}"
-            test -n "${AWS_BUCKET}"
+            test -n "${$AWS_BUCKET_STAGE}"
+          # todo: test -n "${$AWS_BUCKET_PRODUCTION}"
       - aws-cli/setup
       - checkout
       - run:
@@ -29,7 +30,9 @@ jobs:
             tar -czf project-template.tar.gz --exclude=project-template.tar.gz .
       - run:
           name: Publish the project archive to S3
-          command: aws s3 cp project-template.tar.gz s3://$AWS_BUCKET/laravel-docker-template/dist/$CIRCLE_TAG/project-template.tar.gz
+          command: |
+            aws s3 cp project-template.tar.gz s3://$AWS_BUCKET_STAGE/laravel-docker-template/dist/$CIRCLE_TAG/project-template.tar.gz
+          # todo: aws s3 cp project-template.tar.gz s3://$AWS_BUCKET_PRODUCTION/laravel-docker-template/dist/$CIRCLE_TAG/project-template.tar.gz
 workflows:
   version: 2
   publish-tag-workflow:
