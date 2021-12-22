@@ -1,0 +1,42 @@
+version: 2.1
+
+orbs:
+  aws-cli: circleci/aws-cli@2.0.6
+
+jobs:
+  publish-tag:
+    executor: aws-cli/default
+    steps:
+      - run:
+          name: Check Required Envionment Variables
+          command: |
+            set -e
+            test -n "${AWS_ACCESS_KEY_ID}"
+            test -n "${AWS_SECRET_ACCESS_KEY}"
+            test -n "${AWS_DEFAULT_REGION}"
+            test -n "${AWS_BUCKET}"
+      - aws-cli/setup
+      - checkout
+      - run:
+          name: Remove unneeded directories
+          command: |
+            rm -rf .git
+            rm -rf .circleci
+      - run:
+          name: Archive the project
+          command: |
+            touch project-template.tar.gz
+            tar -czf project-template.tar.gz --exclude=project-template.tar.gz .
+      - run:
+          name: Publish the project archive to S3
+          command: aws s3 cp project-template.tar.gz s3://$AWS_BUCKET/laravel-docker-template/dist/$CIRCLE_TAG/project-template.tar.gz
+workflows:
+  version: 2
+  publish-tag-workflow:
+    jobs:
+      - publish-tag:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
