@@ -83,7 +83,7 @@ RUN --mount=type=ssh if [[ -f 'composer.json' ]] ; then \
     fi
 
 RUN if [[  -f 'package.json' ]] ; then \
-     yarn && yarn run prod ; \
+     yarn && yarn run prod && rm -rf node_modules ; \
    else \
      echo 'package.json not found' ; \
    fi
