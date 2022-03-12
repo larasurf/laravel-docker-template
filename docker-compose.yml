@@ -59,8 +59,8 @@ services:
       - "${SURF_DB_PORT:-3306}:3306"
     environment:
       MYSQL_ROOT_PASSWORD: supersecret
-      MYSQL_DATABASE: laravel_local
-      MYSQL_USER: laravel_local
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
       MYSQL_PASSWORD: supersecret
     volumes:
       - 'database:/var/lib/mysql'
