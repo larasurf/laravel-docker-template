@@ -1,6 +1,6 @@
 FROM php:8.0-fpm-alpine
 
-ENV COMPOSER_VERSION 2.0.13
+ENV COMPOSER_VERSION 2.2.7
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
 # ping workaround for docker DNS issues
