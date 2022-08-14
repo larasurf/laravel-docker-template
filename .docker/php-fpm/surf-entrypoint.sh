@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-if [ ! -z "${SURF_USER_ID}" ]; then
+if [ ! -z "${SURF_USER_ID}" ] && [ ! -z "${SURF_GROUP_ID}" ]; then
     usermod -u ${SURF_USER_ID} www-data
+    groupmod -g ${SURF_GROUP_ID} www-data
 fi
 
 if [ -d "/home/www-data/.composer" ]; then

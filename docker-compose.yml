@@ -49,6 +49,7 @@ services:
       - cache
     environment:
       SURF_USER_ID: "${SURF_USER_ID}"
+      SURF_GROUP_ID: "${SURF_GROUP_ID}"
     expose:
         - "5173"
     volumes:
