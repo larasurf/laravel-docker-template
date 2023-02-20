@@ -19,7 +19,7 @@ services:
       - ./:/app
 
   mail:
-    image: mailhog/mailhog:latest
+    image: axllent/mailpit:latest
     ports:
       - "${SURF_MAIL_UI_PORT:-8025}:8025"
 
