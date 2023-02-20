@@ -2,8 +2,8 @@ ARG WEB_ROOT=/var/www
 
 FROM php:8.2-fpm-alpine AS assets
 
+ARG WEB_ROOT
 COPY ./ $WEB_ROOT
-
 WORKDIR $WEB_ROOT
 
 RUN if [[  -f 'package.json' ]] ; then \
@@ -18,8 +18,8 @@ FROM php:8.2-fpm-alpine
 ENV COMPOSER_VERSION 2.5.4
 ENV COMPOSER_ALLOW_SUPERUSER 1
 
+ARG WEB_ROOT
 WORKDIR $WEB_ROOT
-
 COPY --from=assets $WEB_ROOT .
 
 # ping workaround for docker DNS issues
