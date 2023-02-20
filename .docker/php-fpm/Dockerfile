@@ -39,6 +39,7 @@ COPY --from=assets-deps $WEB_ROOT .
 COPY --from=assets-deps /usr/local/bin/composer /usr/local/bin/composer
 
 RUN apk add --no-cache shadow su-exec git openssh bash make zip unzip nodejs npm yarn && \
+    apk upgrade curl && \
     curl -sSL https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions -o - | sh -s \
           bcmath ctype curl fileinfo gd imap intl json ldap mbstring openssl pdo_mysql igbinary msgpack redis tokenizer xml zip zlib && \
     cp $PHP_INI_DIR/php.ini-production $PHP_INI_DIR/php.ini
