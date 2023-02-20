@@ -3,6 +3,7 @@
 if [ ! -z "${SURF_USER_ID}" ] && [ ! -z "${SURF_GROUP_ID}" ]; then
     usermod -u ${SURF_USER_ID} www-data
     groupmod -g ${SURF_GROUP_ID} www-data
+    chown -R ${SURF_USER_ID}:${SURF_GROUP_ID} .
 fi
 
 if [ -d "/home/www-data/.composer" ]; then
