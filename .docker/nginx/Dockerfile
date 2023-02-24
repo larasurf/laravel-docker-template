@@ -1,4 +1,4 @@
-FROM nginx:1.23.1-alpine
+FROM nginx:1.23.3-alpine
 
 ENV UPSTREAM_HOST localhost
 ENV UPSTREAM_PORT 9000
