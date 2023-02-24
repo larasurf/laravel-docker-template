@@ -30,7 +30,7 @@ RUN --mount=type=ssh if [[ -f 'composer.json' ]] ; then \
     fi
 
 RUN if [[  -f 'package.json' ]] ; then \
-      apk add --no-cache nodejs npm yarn && yarn && yarn run prod && rm -rf node_modules ; \
+      apk add --no-cache nodejs npm yarn && yarn --frozen-lockfile && yarn run prod && rm -rf node_modules ; \
     else \
       echo 'package.json not found' ; \
     fi && \
