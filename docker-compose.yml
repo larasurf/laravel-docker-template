@@ -7,15 +7,16 @@ services:
     command: '--version'
 
   awslocal:
-    image: localstack/localstack
+    image: localstack/localstack:1.4
     environment:
-      DATA_DIR: /tmp/localstack/data
       HOSTNAME_EXTERNAL: localstack
       SERVICES: 'cloudformation,s3,sqs'
+      DISABLE_CORS_CHECKS: 1
+      EXTRA_CORS_ALLOWED_HEADERS: x-requested-with
     ports:
       - "${SURF_AWSLOCAL_PORT:-4566}:4566"
     volumes:
-      - ./.docker/localstack/init.d:/docker-entrypoint-initaws.d
+      - ./.docker/localstack/ready.d:/etc/localstack/init/ready.d
       - ./:/app
 
   mail:

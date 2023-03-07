@@ -2,4 +2,4 @@
 
 awslocal cloudformation create-stack \
     --stack-name "app" \
-    --template-body "file:///docker-entrypoint-initaws.d/app.yml"
+    --template-body "file:///etc/localstack/init/ready.d/app.yml"
