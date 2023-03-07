@@ -9,7 +9,7 @@ services:
   awslocal:
     image: localstack/localstack:1.4
     environment:
-      HOSTNAME_EXTERNAL: localstack
+      HOSTNAME_EXTERNAL: "${SESSION_DOMAIN:-localhost}"
       SERVICES: 'cloudformation,s3,sqs'
       DISABLE_CORS_CHECKS: 1
       EXTRA_CORS_ALLOWED_HEADERS: x-requested-with
